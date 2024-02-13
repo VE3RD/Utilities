@@ -3,6 +3,7 @@ sudo mount -o remount,rw / > /dev/null
 
 T1=$1
 T2=$2
+S=$3
 
 if [ "$T2" == "" ];  then
  echo Usage : ./parselog.sh StartTime StopTime
@@ -22,8 +23,18 @@ Tm="$Hr:$Mi"
 
 echo "$Tm"
 
-#Calls=$(grep "2024-02-13 [10:00-14:59]" "$F1" | grep 'transmission from' | cut -d " " -f 14 | sort | uniq)
-Calls=$(grep "2024-02-13 [$T1-$T2]" "$F1" | grep 'transmission from' | cut -d " " -f 14 | sort | uniq)
-echo "$Calls"
+#Calls=$(grep "2024-02-13 [10:00-14:59]" "$F1" | grep 'transmission from' | cut -d " " -f 2,3,14 | sort | uniq)
+Calls=$(grep "2024-02-13 [$T1-$T2]" "$F1" | grep 'transmission from' | cut -d " " -f 2,3,14 | sort -k3)
 
-echo "Count = $Calls" |wc -l
+
+if [ "$S" == 1 ]; then
+	Calls2=$(echo "$Calls" | sort -k2 | uniq -u)
+
+else
+	Calls2=$(echo "$Calls" | uniq -f 2 -u)
+
+
+fi
+echo "$Calls2"
+
+echo "Count = $Calls2" |wc -l
