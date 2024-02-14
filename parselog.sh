@@ -13,15 +13,16 @@ fi
 
 ##### Main program #########
 #F1=$(tail -n 1000 /var/log/pi-star/MMDVM-20*  )
-F1=$(ls -alt /var/log/pi-star/MMDVM-20* | tail -n 1 | cut -d " " -f9)
-#echo "$F1" 
+F1=$(ls -altr /var/log/pi-star/MMDVM-20* | tail -n 1 | cut -d " " -f9)
+Str=$(tail -n1  /var/log/pi-star/MMDVM-20* | tail -1 | cut -d " " -f2)
+#echo "$Str" 
 DT=$(cat $F1| tail -n 1 | cut -d " " -f2)
 #echo "$DT"
 Hr=$(cat $F1| tail -n 1 | cut -d " " -f3 | cut -d ":" -f1)
 Mi=$(cat $F1| tail -n 1 | cut -d " " -f3 | cut -d ":" -f2)
 Tm="$Hr:$Mi"
 
-Calls=$(grep "2024-02-13 [$T1-$T2]" "$F1" | grep 'transmission from' | cut -d " " -f 2,3,14 | sort -k3 | uniq -f 2 -u)
+Calls=$(grep "$Str [$T1-$T2]" "$F1" | grep 'transmission from' | cut -d " " -f 2,3,14 | sort -k3 | uniq -f 2 -u)
 
 IFS==$(echo -en "\n\b")
 
