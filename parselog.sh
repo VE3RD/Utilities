@@ -5,6 +5,8 @@ T1=$1
 T2=$2
 St=$3
 
+count=0
+
 Dat=$(date +%Y/%m/%d)
 
 if [ "$T2" == "" ];  then
@@ -78,10 +80,10 @@ ltm=$(date -d "${LineDT:0:-1} UTC" '+%Y/%m/%d %R')
 		Line2=$(grep "$Call" /usr/local/etc/stripped.csv | tail -1 | cut -d "," -f3,4,5,6,7 ) 
 		echo "$ltm $Call $Dur $Line2" 
 #		echo "$Item $Line2" 
-		
+		((count++))		
 	fi
-	
 done
+echo "Count = $count"
 
 
 
