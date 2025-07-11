@@ -12,10 +12,11 @@ Dat=$(date +%Y/%m/%d)
 if [ "$T2" == "" ];  then
  echo Usage : ./parselog.sh StartTime StopTime Switch
  echo ie :   ./parselog.sh 18:00 22:59 
- echo Switch = "", "T (Time)", or "U (Unique)"
+ echo Switch = "Null - No Filter", "C (Call)", or "U (Unique)"
  exit
 fi
 
+echo "Options Null, [C]all,  [U]nique"
 dts1="$Dat $T1:00"
 dts2="$Dat $T2:00"
 
@@ -42,13 +43,16 @@ Line=$(cat /var/log/pi-star/MMDVM-20* | grep 'transmission from')
 #echo "$Line"
 
 if [ "$3" == "U" ]; then 
+   echo "Mode = Sort and filter on Call - Unique"
 #	Calls=$(echo "$Line" | cut -d " " -f 2,3,14,18 | sort -k3 | uniq -f 3 -u )
 	Calls=$(echo "$Line" | cut -d " " -f 2,3,14,18 | sort -k3,3 -u )
 
-elif [ "$3" == "T" ]; then
+elif [ "$3" == "C" ]; then
+    echo "Mode = Sort on Call"
 #	Calls=$(echo "$Line" | cut -d " " -f 2,3,14,18 | sort -t " " -k2,2 )
 	Calls=$(echo "$Line" | cut -d " " -f 2,3,14,18 | sort -k3,3)
 else
+	echo "Mode = No Filter "
 	Calls=$(echo "$Line" | cut -d " " -f 2,3,14,18 )
 fi 
 
